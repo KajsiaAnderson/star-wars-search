@@ -19,6 +19,8 @@ const StarWars = () => {
         }
         if(e.key !== 'Enter') {
             setError(null);
+            setCharacters([]);
+            setSelectedCharacter(null);
         }
     }
 

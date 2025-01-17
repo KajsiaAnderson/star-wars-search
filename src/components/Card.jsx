@@ -19,7 +19,7 @@ const Card = ({selectedCharacter, characters, handleCharacter}) => {
                 {characters.length > 0 && (
                   <ul>
                     {characters.map((character) => (
-                      <li className='cursor-pointer text-dark text-xl p-4 hover:scale-110 transform transition duration-300' key={character.name} onClick={() => handleCharacter(character)}>
+                      <li className='cursor-pointer text-dark text-xl p-4 hover:scale-110 transform transition duration-300 border border-dark rounded border shadow-md m-4 text-center' key={character.name} onClick={() => handleCharacter(character)}>
                         <p >{character.name}</p>
                       </li>
                     ))}
