@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import Card from './components/Card';
 
 const StarWars = () => {
     const [query, setName] = useState('');
@@ -15,6 +16,9 @@ const StarWars = () => {
     const handleKeyDown = (e) => {
         if(e.key === 'Enter') {
             document.getElementById('search').click();
+        }
+        if(e.key !== 'Enter') {
+            setError(null);
         }
     }
 
@@ -34,7 +38,7 @@ const StarWars = () => {
         setLoading(true);
         
         try {
-            const response = await axios.get(`/api/people?query=${query}`);
+            const response = await axios.get(`/api?query=${query}`);
             if (response.data.length === 0) {
                 setError('Character not found');
             }
@@ -50,47 +54,33 @@ const StarWars = () => {
     }
 
   return (
-    <div className='flex flex-col justify-center items-center'>
-        <div className='pb-6'>
+    <div className='flex flex-col justify-center items-center mt-6'>
+        <div className='flex items-center border border-gray-300 rounded-md p-2 mt-8 focus-within:ring focus-within:ring-dark w-1/2'>
             <input
                 type="text"
                 placeholder="Search for character"
-                className='p-4 focus:outline-none'
+                className='flex-grow focus:outline-none'
                 value={query}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
             />
-            <button id='search' onClick={searchCharacters} disabled={!query.trim()} className='bg-black text-white p-4'>Search</button>
+            <button
+            id='search'
+            onClick={searchCharacters}
+            className="ml-2 p-2 rounded-md"
+          >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="dark" className="h-4 w-4">
+                <path d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"></path>
+                </svg>
+          </button>
         </div>
 
-        {loading && <p className='text-white'>Loading...</p>}
-        {error && <p className='text-white'>{error}</p>}
+        {loading && <p className='text-dark'>Loading...</p>}
+        {error && <p className='text-red-400'>{error}</p>}
 
-        {selectedCharacter ? (
-                <div className='text-white text-xl'>
-                    <div className='p-4'><span className='font-bold'>Name:</span> {selectedCharacter.name}</div>
-                    <div className='p-4'><span className='font-bold'>Planet:</span> {selectedCharacter.homeworld}</div>
-                    <div className='p-4'><span className='font-bold'>Films:</span> {selectedCharacter.films.length > 0 ? (
-                            selectedCharacter.films.map((film) => <li key={film}>{film}</li>)
-                        ) : (
-                            <li>no films</li>
-                        )}
-                    </div>
-                </div>
-            ) : (
-                <div>
-                {characters.length > 0 && (
-                  <ul>
-                    {characters.map((character) => (
-                      <li className='cursor-pointer text-yellow text-xl p-4 hover:scale-110 transform transition duration-300' key={character.name} onClick={() => handleCharacter(character)}>
-                        <p >{character.name}</p>
-                      </li>
-                    ))}
-                  </ul>
-                )} 
-              </div>
-            )
-        }
+        <div className='w-1/2'>
+            <Card selectedCharacter={selectedCharacter} characters={characters} handleCharacter={handleCharacter} />
+        </div>
         
    </div>
   )
